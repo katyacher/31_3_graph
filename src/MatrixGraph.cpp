@@ -15,20 +15,33 @@ public:
             adjMatrix[i][j] = false;
         }
     }
- 
+    
+    ~MatrixGraph() {
+        for (int i = 0; i < numVertices; i++)
+            delete[] adjMatrix[i];
+        delete[] adjMatrix;
+    }
+
+    MatrixGraph(IGraph *oth){};
+
     void AddEdge(int i, int j) {
         adjMatrix[i][j] = true;
         adjMatrix[j][i] = true;
-    }
+    } // Метод принимает вершины начала и конца ребра и добавляет ребро
  
-    void removeEdge(int i, int j) {
-        adjMatrix[i][j] = false;
-        adjMatrix[j][i] = false;
-    }
- 
-    bool isEdge(int i, int j) {
-        return adjMatrix[i][j];
-    }
+    int VerticesCount() const{
+
+    }; // Метод должен считать текущее количество вершин
+
+    // Для конкретной вершины метод выводит в вектор «вершины» все вершины, в которые можно дойти по ребру из данной
+    virtual void GetNextVertices(int vertex, std::vector<int> &vertices) const {
+
+    };
+
+    // Для конкретной вершины метод выводит в вектор «вершины» все вершины, из которых можно дойти по ребру в данную 
+    virtual void GetPrevVertices(int vertex, std::vector<int> &vertices) const{
+
+    }; 
 
     void toString() {
         for (int i = 0; i < numVertices; i++) {
@@ -37,12 +50,5 @@ public:
                 std::cout << adjMatrix[i][j] << " ";
             std::cout << "\n";
         }
-    }
-
- 
-    ~MatrixGraph() {
-        for (int i = 0; i < numVertices; i++)
-            delete[] adjMatrix[i];
-        delete[] adjMatrix;
     }
 };
