@@ -1,6 +1,7 @@
 #include <iostream>
+#include <IGraph.h>
 
-class MatrixGraph {
+class MatrixGraph: public IGraph {
 private:
     bool** adjMatrix;
     int numVertices;
@@ -15,7 +16,7 @@ public:
         }
     }
  
-    void addEdge(int i, int j) {
+    void AddEdge(int i, int j) {
         adjMatrix[i][j] = true;
         adjMatrix[j][i] = true;
     }
