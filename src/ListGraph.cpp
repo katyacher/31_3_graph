@@ -1,62 +1,65 @@
 #include <iostream>
-#include <list>
+#include <map>
 #include <IGraph.h>
 
 class ListGraph: public IGraph{
-    int numVertices;
-    std::list<int> *adjLists;
+    std::map<int, std::vector<int>> adjList; //adjacency
  
 public:
-    ListGraph(int vertices){
-        numVertices = vertices;
-        adjLists = new std::list<int>[vertices];
+    ListGraph(){
+        std::cout << "ListGraph constructor";
     }
 
     ~ListGraph(){
-        delete adjLists;
+        std::cout << "ListGraph destructor";
     }
 
-    ListGraph(IGraph *oth){};
+    ListGraph(IGraph *oth){};// конструктор копирования
 
-    void AddEdge(int src, int dest){
-        adjLists[src].push_front(dest);
-    } // Метод принимает вершины начала и конца ребра и добавляет ребро
+    void AddEdge(int from, int to){
+        if(from < 0 || to < 0){
+            std::cout << "Incrrect value" << std::endl;
+            return;
+        }
+
+        adjList[from].push_back(to);
+
+        if(adjList.find(to) == adjList.end()){
+            adjList[to] = std::vector<int>();
+        }        
+    }; // Метод принимает вершины начала и конца ребра и добавляет ребро
 
     int VerticesCount() const{
-
+        return adjList.size();
     }; // Метод должен считать текущее количество вершин
 
     // Для конкретной вершины метод выводит в вектор «вершины» все вершины, в которые можно дойти по ребру из данной
     virtual void GetNextVertices(int vertex, std::vector<int> &vertices) const {
+        auto it = adjList.find(vertex);
 
+        if(it != adjList.end()){
+            vertices.clear();
+            for(auto &vert : it->second)
+                vertices.push_back(vert);
+            }
+        else
+        {
+            std::cout<< "Incorect vertex" << std::endl;
+        }
     };
 
     // Для конкретной вершины метод выводит в вектор «вершины» все вершины, из которых можно дойти по ребру в данную 
     virtual void GetPrevVertices(int vertex, std::vector<int> &vertices) const{
-
-    }; 
-
-    void toString() {
-        for (int i = 0; i < numVertices; i++) {
-            std::cout << adjLists << " ";//доделать
+        auto it_check = adjList.find(vertex);
+        if(it_check != adjList.end()){
+            vertices.clear();
+            for(auto &adj: adjList){
+               for(int i = 0; i < adj.second.size(); i++){
+                    if(vertex == adj.second[i]){
+                        vertices.push_back(adj.first);
+                    }
+                }   
+            }
         }
-    }
+    }; 
 };
-
-
- /*
-ListGraph::ListGraph(int vertices)
-{
-    numVertices = vertices;
-    adjLists = new std::list<int>[vertices];
-}
- 
-void ListGraph::AddEdge(int src, int dest)
-{
-    adjLists[src].push_front(dest);
-}
-
-ListGraph::~ListGraph(){
-    delete adjLists;
-}
- */
