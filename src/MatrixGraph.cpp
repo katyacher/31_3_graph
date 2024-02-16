@@ -6,13 +6,12 @@ private:
     bool** adjMatrix;
     int numVertices;
 public:
-    MatrixGraph(int numVertices) {
-        this->numVertices = numVertices;
-        adjMatrix = new bool*[numVertices];
-        for (int i = 0; i < numVertices; i++) {
-            adjMatrix[i] = new bool[numVertices];
-            for (int j = 0; j < numVertices; j++)
-            adjMatrix[i][j] = false;
+     MatrixGraph(int numVert): numVertices(numVert){
+        adjMatrix = new bool*[numVert];
+        for (int i = 0; i < numVert; i++) {
+            adjMatrix[i] = new bool[numVert];
+            for (int j = 0; j < numVert; j++)
+                adjMatrix[i][j] = false;
         }
     }
     

@@ -1,65 +1,94 @@
 #include <iostream>
 #include <map>
-#include <IGraph.h>
+#include <vector>
+#include "ListGraph.h"
+#include "MatrixGraph.h"
 
-class ListGraph: public IGraph{
-    std::map<int, std::vector<int>> adjList; //adjacency
- 
-public:
-    ListGraph(){
-        std::cout << "ListGraph constructor";
+ListGraph::ListGraph(){
+    std::cout << "ListGraph() is constructed";
+}
+
+ListGraph::~ListGraph(){
+    std::cout << "~ListGraph()";
+}
+
+ListGraph::ListGraph(IGraph *oth){
+   // MatrixGraph *matrix = dynamic_cast<MatrixGraph *>(oth);
+    //if (matrix){
+
+   // } 
+
+    ListGraph *adjlist = dynamic_cast<ListGraph*>(oth);
+    if(adjlist)
+    {
+        adjList = adjlist->adjList;
+    }
+};
+
+void ListGraph::AddEdge(int from, int to){
+    if(from < 0 || to < 0){
+        std::cout << "Incrrect value" << std::endl;
+        return;
     }
 
-    ~ListGraph(){
-        std::cout << "ListGraph destructor";
+    std::vector<int> vertices{to};
+    auto it = adjList.insert(std::make_pair(from, vertices));
+
+    //если вершина уже есть, то добавляем смежную вершину в вектор
+    if (!it.second){
+        it.first->second.push_back(to);
     }
 
-    ListGraph(IGraph *oth){};// конструктор копирования
+    //adjList[from].push_back(to); то же самое, что выше
 
-    void AddEdge(int from, int to){
-        if(from < 0 || to < 0){
-            std::cout << "Incrrect value" << std::endl;
-            return;
+    //если добавляется новая вершина
+    if(adjList.find(to) == adjList.end()){
+        adjList[to] = std::vector<int>();
+    }        
+}; 
+
+int ListGraph::VerticesCount() const{
+    return adjList.size();
+}; 
+
+   
+void ListGraph::GetNextVertices(int vertex, std::vector<int> &vertices) const {
+
+    auto it = adjList.find(vertex);
+
+    if(it != adjList.end()){
+        vertices.clear();
+        for(auto &adj_vertex : it->second)
+            vertices.push_back(adj_vertex);
+    }else{
+        std::cout<< "Incorect vertex" << std::endl;
+    }
+};
+
+   
+void ListGraph::GetPrevVertices(int vertex, std::vector<int> &vertices) const{
+
+    auto it = adjList.find(vertex);
+
+    if(it != adjList.end()){
+        vertices.clear();
+        for(auto &adj: adjList){
+            for(int i = 0; i < adj.second.size(); i++){
+                if(vertex == adj.second[i]){
+                    vertices.push_back(adj.first);
+                }
+            }   
         }
+    }
+}; 
 
-        adjList[from].push_back(to);
+void  ListGraph::ShowGraph() const{
+    for(auto &vertex: adjList){
+        std::cout << vertex.first << "-> (";
 
-        if(adjList.find(to) == adjList.end()){
-            adjList[to] = std::vector<int>();
-        }        
-    }; // Метод принимает вершины начала и конца ребра и добавляет ребро
-
-    int VerticesCount() const{
-        return adjList.size();
-    }; // Метод должен считать текущее количество вершин
-
-    // Для конкретной вершины метод выводит в вектор «вершины» все вершины, в которые можно дойти по ребру из данной
-    virtual void GetNextVertices(int vertex, std::vector<int> &vertices) const {
-        auto it = adjList.find(vertex);
-
-        if(it != adjList.end()){
-            vertices.clear();
-            for(auto &vert : it->second)
-                vertices.push_back(vert);
-            }
-        else
-        {
-            std::cout<< "Incorect vertex" << std::endl;
-        }
-    };
-
-    // Для конкретной вершины метод выводит в вектор «вершины» все вершины, из которых можно дойти по ребру в данную 
-    virtual void GetPrevVertices(int vertex, std::vector<int> &vertices) const{
-        auto it_check = adjList.find(vertex);
-        if(it_check != adjList.end()){
-            vertices.clear();
-            for(auto &adj: adjList){
-               for(int i = 0; i < adj.second.size(); i++){
-                    if(vertex == adj.second[i]){
-                        vertices.push_back(adj.first);
-                    }
-                }   
-            }
-        }
-    }; 
+        for(auto &adj_vertex : vertex.second)
+            std::cout << adj_vertex << " ";
+        
+        std::cout <<")" << std::endl;
+    }
 };
