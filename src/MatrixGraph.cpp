@@ -28,8 +28,21 @@ MatrixGraph::~MatrixGraph() {
 }
 
 MatrixGraph::MatrixGraph(IGraph *oth){
+    ListGraph* list = dynamic_cast<ListGraph*>(oth);
+    if(list){
+        int size = list->VerticesCount();
+        for(int i = 0; i < size; ++i){
+            std::vector<int> next_vertices;
+            list->GetNextVertices(i, next_vertices);
+            for(auto &vertex: next_vertices){
+                this->AddEdge(i, vertex);
+            }
+        }
 
-
+        std::cout << "Convert List to Matrix" << std::endl;
+    } else {
+        std::cout << "No convert matrix to matrix" << std::endl;
+    }
 };
 
 void MatrixGraph::AddEdge(int from, int to) {
