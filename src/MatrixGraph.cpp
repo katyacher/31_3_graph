@@ -1,53 +1,104 @@
 #include <iostream>
-#include <IGraph.h>
+#include <map>
+#include <vector>
+#include <set>
+#include <algorithm>
+#include "IGraph.h"
+#include "ListGraph.h"
+#include "MatrixGraph.h"
 
-class MatrixGraph: public IGraph {
-private:
-    bool** adjMatrix;
-    int numVertices;
-public:
-     MatrixGraph(int numVert): numVertices(numVert){
-        adjMatrix = new bool*[numVert];
-        for (int i = 0; i < numVert; i++) {
-            adjMatrix[i] = new bool[numVert];
-            for (int j = 0; j < numVert; j++)
-                adjMatrix[i][j] = false;
+MatrixGraph::MatrixGraph(){
+    std::cout << "MatrixGraph() is constructed" << std::endl;
+};
+
+MatrixGraph::MatrixGraph(int numVertices){
+
+    adjMatrix.resize(numVertices);
+
+    for (int i = 0; i < numVertices; i++) {
+        for (int j = 0; j < numVertices; j++)
+            adjMatrix[i][j] = false;
+    }
+
+    std::cout << "MatrixGraph() is constructed" << std::endl;
+}
+    
+MatrixGraph::~MatrixGraph() {
+    std::cout << "~MatrixGraph()" << std::endl;
+}
+
+MatrixGraph::MatrixGraph(IGraph *oth){
+
+
+};
+
+void MatrixGraph::AddEdge(int from, int to) {
+    if(from < 0 || to < 0) {
+        std::cout << "Incorrect value for new vertex." << std::endl;
+        return;
+    }
+
+    int max = std::max(from, to);
+
+    if(adjMatrix.size() <= max){
+        //увеличить размер матрицы и проинициализировать новые поля значением false
+        adjMatrix.resize(max+1);
+        for(int i = 0; i <= max; ++i){
+            adjMatrix[i].resize(max+1, false);
         }
     }
-    
-    ~MatrixGraph() {
-        for (int i = 0; i < numVertices; i++)
-            delete[] adjMatrix[i];
-        delete[] adjMatrix;
+
+    adjMatrix[from][to] = true;
+
+} 
+ 
+int MatrixGraph::VerticesCount() const{
+    return adjMatrix.size();
+} 
+
+   
+void MatrixGraph::GetNextVertices(int vertex, std::vector<int> &vertices) const {
+    if(vertex >= adjMatrix.size()){
+        std::cout<< "Incorect vertex" << std::endl;
+        return;
     }
 
-    MatrixGraph(IGraph *oth){};
-
-    void AddEdge(int i, int j) {
-        adjMatrix[i][j] = true;
-        adjMatrix[j][i] = true;
-    } // Метод принимает вершины начала и конца ребра и добавляет ребро
- 
-    int VerticesCount() const{
-
-    }; // Метод должен считать текущее количество вершин
-
-    // Для конкретной вершины метод выводит в вектор «вершины» все вершины, в которые можно дойти по ребру из данной
-    virtual void GetNextVertices(int vertex, std::vector<int> &vertices) const {
-
-    };
-
-    // Для конкретной вершины метод выводит в вектор «вершины» все вершины, из которых можно дойти по ребру в данную 
-    virtual void GetPrevVertices(int vertex, std::vector<int> &vertices) const{
-
-    }; 
-
-    void toString() {
-        for (int i = 0; i < numVertices; i++) {
-            std::cout << i << " : ";
-            for (int j = 0; j < numVertices; j++)
-                std::cout << adjMatrix[i][j] << " ";
-            std::cout << "\n";
+    for (int j = 0; j < adjMatrix.size(); ++j){
+        if (adjMatrix[vertex][j] == true){
+            vertices.push_back(j);
         }
     }
 };
+
+void MatrixGraph::GetPrevVertices(int vertex, std::vector<int> &vertices) const{
+    if(vertex >= adjMatrix.size()){
+        std::cout<< "Incorect vertex" << std::endl;
+        return;
+    }
+
+    for (int i = 0; i < adjMatrix.size(); ++i){
+        if (adjMatrix[i][vertex] == true){
+            vertices.push_back(i);
+        }
+    }
+}; 
+
+void MatrixGraph::ShowGraph() {
+
+    std::cout<<"__";
+
+    for(int top = 0; top < adjMatrix.size(); ++top)
+        std::cout << top;
+
+    std::cout << std::endl;
+
+    for (int i = 0; i < adjMatrix.size(); i++) {
+        std::cout << i << " | ";
+        for (int j = 0; j < adjMatrix.size(); j++)
+            std::cout << "\u001b;4;" << adjMatrix[i][j];
+        std::cout << std::endl;
+    }
+};
+
+
+

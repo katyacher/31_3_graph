@@ -4,10 +4,13 @@
 
 class MatrixGraph: public IGraph {
     private:
-        bool** adjMatrix;
-        int numVertices;
+
+        std::vector<std::vector<bool>> adjMatrix;
+
     public:
-        MatrixGraph(int numVert): numVertices(numVert){};
+        MatrixGraph(){};
+
+        MatrixGraph(int numVert){};
 
         ~MatrixGraph();
 
@@ -25,13 +28,6 @@ class MatrixGraph: public IGraph {
         // Для конкретной вершины метод выводит в вектор “вершины” все вершины, из которых можно дойти по ребру в данную
         void GetPrevVertices(int vertex, std::vector<int> &vertices) const override;
 
-        void ShowGraph() {
-        for (int i = 0; i < numVertices; i++) {
-            std::cout << i << " : ";
-            for (int j = 0; j < numVertices; j++)
-                std::cout << adjMatrix[i][j] << " ";
-            std::cout << "\n";
-        }
-    }
+        void ShowGraph() {};
 
 };

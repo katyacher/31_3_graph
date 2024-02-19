@@ -1,6 +1,6 @@
 #include <iostream>
 #include <map>
-#include <IGraph.h>
+#include "IGraph.h"
 
 class ListGraph: public IGraph{
 
