@@ -34,6 +34,7 @@ ListGraph::ListGraph(IGraph *oth){
                 }
             }
         }
+        std::cout << "Convert Matrix to List" << std::endl;
     }else {
         std::cout << "No convert list to list" << std::endl;
     }
