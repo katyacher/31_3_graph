@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 3.8.0)
 project(31_1_graph VERSION 0.1.0 LANGUAGES C CXX)
 
-include(CTest)
-enable_testing()
-
 set(CMAKE_CXX_STANDARD 20)
 set(MY_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 

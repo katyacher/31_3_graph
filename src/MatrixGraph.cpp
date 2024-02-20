@@ -1,9 +1,6 @@
 #include <iostream>
-#include <map>
-#include <vector>
 #include <set>
 #include <algorithm>
-#include "IGraph.h"
 #include "ListGraph.h"
 #include "MatrixGraph.h"
 
@@ -21,11 +18,11 @@ MatrixGraph::MatrixGraph(int numVertices){
     }
 
     std::cout << "MatrixGraph() is constructed" << std::endl;
-}
+};
     
 MatrixGraph::~MatrixGraph() {
     std::cout << "~MatrixGraph()" << std::endl;
-}
+};
 
 MatrixGraph::MatrixGraph(IGraph *oth){
     ListGraph* list = dynamic_cast<ListGraph*>(oth);
@@ -96,19 +93,19 @@ void MatrixGraph::GetPrevVertices(int vertex, std::vector<int> &vertices) const{
     }
 }; 
 
-void MatrixGraph::ShowGraph() {
+void MatrixGraph::ShowGraph() const{
 
-    std::cout<<"__";
+    std::cout<<"__ ";
 
     for(int top = 0; top < adjMatrix.size(); ++top)
-        std::cout << top;
+        std::cout << " " << top ;
 
     std::cout << std::endl;
 
     for (int i = 0; i < adjMatrix.size(); i++) {
         std::cout << i << " | ";
         for (int j = 0; j < adjMatrix.size(); j++)
-            std::cout << "\u001b;4;" << adjMatrix[i][j];
+            std::cout  << adjMatrix[i][j] << " ";
         std::cout << std::endl;
     }
 };

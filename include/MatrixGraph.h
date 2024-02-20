@@ -1,6 +1,5 @@
 #pragma once
-#include <iostream>
-#include <IGraph.h>
+#include "IGraph.h"
 
 class MatrixGraph: public IGraph {
     private:
@@ -8,9 +7,9 @@ class MatrixGraph: public IGraph {
         std::vector<std::vector<bool>> adjMatrix;
 
     public:
-        MatrixGraph(){};
+        MatrixGraph();
 
-        MatrixGraph(int numVert){};
+        MatrixGraph(int numVert);
 
         ~MatrixGraph();
 
@@ -28,6 +27,6 @@ class MatrixGraph: public IGraph {
         // Для конкретной вершины метод выводит в вектор “вершины” все вершины, из которых можно дойти по ребру в данную
         void GetPrevVertices(int vertex, std::vector<int> &vertices) const override;
 
-        void ShowGraph() {};
+        void ShowGraph() const override;
 
 };

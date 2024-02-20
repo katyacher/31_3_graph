@@ -4,25 +4,40 @@
 #include "ListGraph.h"
 #include "MatrixGraph.h"
 
+
+
 ListGraph::ListGraph(){
-    std::cout << "ListGraph() is constructed";
-}
+    std::cout << "ListGraph() is constructed" << std::endl;
+};
 
 ListGraph::~ListGraph(){
-    std::cout << "~ListGraph()";
-}
+    std::cout << "~ListGraph()" << std::endl;
+};
+
 
 ListGraph::ListGraph(IGraph *oth){
-   // MatrixGraph *matrix = dynamic_cast<MatrixGraph *>(oth);
-    //if (matrix){
+    MatrixGraph *matrix = dynamic_cast<MatrixGraph *>(oth);
+    if (matrix){
+        if(matrix->VerticesCount() != 0){
+            for (int i = 0;  i < matrix->VerticesCount(); ++i){
+                std::vector<int> next_vertices;
+                matrix->GetNextVertices(i, next_vertices);
 
-   // } 
-
-    ListGraph *adjlist = dynamic_cast<ListGraph*>(oth);
-    if(adjlist)
-    {
-        adjList = adjlist->adjList;
+                if(next_vertices.size() != 0){
+                    adjList[i] = next_vertices;
+                } else {
+                    std::vector<int> prev_vertices;
+                    matrix->GetPrevVertices(i, prev_vertices);
+                    if (prev_vertices.size() != 0){
+                        adjList[i] = std::vector<int>();
+                    }
+                }
+            }
+        }
+    }else {
+        std::cout << "No convert list to list" << std::endl;
     }
+
 };
 
 void ListGraph::AddEdge(int from, int to){
@@ -87,7 +102,7 @@ void  ListGraph::ShowGraph() const{
         std::cout << vertex.first << "-> (";
 
         for(auto &adj_vertex : vertex.second)
-            std::cout << adj_vertex << " ";
+            std::cout << adj_vertex << ",";
         
         std::cout <<")" << std::endl;
     }
